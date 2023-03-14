@@ -1,0 +1,8 @@
+feedback/
+*/__pycache__/
+*.h5
+model/ml_service_copy
+./static/
+uploads/
+*/.pytest_cache
+*ipynb

@@ -1,0 +1,147 @@
+<!doctype html>
+
+      <header class="header" data-preview-item="header" data-menu-style="" data-menu-type="header__nav--overlay" data-section-uid="page_header">
+        <div class="md:px-24 px-4 header__container">
+          <div class="header__wrapper">
+          </div>
+        </div>
+      </header>
+
+      <main class="pt-12 bg-base-200">
+        <div class="sign-in__container">
+          <div class="sign-in__wrapper">
+            <article id="upload_image" class="sign-in__form">
+              <h2 class="page__heading text-center">
+                Find out your dog's race!!!
+              </h2>
+              {% if not filename %}
+                <form method="post" action="/" enctype="multipart/form-data">
+                  <div class="form__group section__heading">
+                    <input type="file" id="image_input2" name="file" class="hidden">
+                    <p>1. Select a file using avobe's button</p>
+                    <p>2. Press the upload button below &nbsp</p>
+                    <label for="image_input2" class="label_button"><u>Upload</u></label>
+                    <p>Then, select a Neural Network model to discover your pet's race</p>
+                    <br>
+                  </div>
+
+                  
+
+                  <div id="display_image2" class="mb-8">
+                    <div>
+                        <img src="{{ url_for('app_router.display_image', filename=filename) }}">
+                    </div>
+                  </div>
+
+                  <p >
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                          <ul>
+                          {% for message in messages %}
+                          <li class="messages">{{ message }}</li>
+                          {% endfor %}
+                          </ul>
+                      {% endif %}
+                    {% endwith %}
+                  </p>
+
+
+                  <div class="form__group section__heading">
+                    <p>Select a model</p>
+                  </div>
+                  <div class="form__group">
+                    {% for model in context['models'] %}
+                      <div class="div_checkbox text-2xl">
+                        <label><input type="radio", name="rbtn_model_selection" value="{{ model }}">{{  model }}</label> <br>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="form__button-group">
+                    <div>
+
+                      
+                      <iframe style="display: none;"></iframe>
+                    </div>
+                    <div class="pl-4">
+                      <button type="submit" class="button button-primary pl-4">
+                        Launch the Neural Network
+                      </button>
+                    </div>
+                    
+                  </div>
+                </form>
+
+              {% endif %}
+              
+            </article>
+          </div>
+        </div> 
+      </main>
+
+
+      {% if filename %}
+        <div class="md:container md:mx-auto text-accent bg-base-200">
+          <div class="md:flex md:flex-wrap justify-center">
+            <div class="md:basis-1/3 flex justify-center">
+              <div class="p-1 pt-2 bg-anyai-gradient mx-2">
+                <div class="bg-base-100">
+                  
+                  <div class="output-image-container">
+                      <img class="output-image" src="{{ url_for('app_router.display_image', filename=filename) }}">
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="md:basis-1/3 flex flex-col justify-center items-center mb-4 mt-4">
+              <div class="hidden md:inline justify-center items-center">
+                <span style="box-sizing:border-box;display:inline-block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:relative;max-width:100%">
+                  <span style="box-sizing:border-box;display:block;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;max-width:100%">
+                    <img style="display:block;max-width:100%;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0" alt="" aria-hidden="true" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+">
+                  </span>
+                  <img alt="Next arrow" src="https://anyoneai.com/_next/image?url=%2Fimg%2Farrow_right.svg&w=32&q=75" decoding="async" data-nimg="intrinsic" class="m-auto" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%">
+                </span>
+              </div>
+              <div class="md:hidden justify-center items-center">
+                <span style="position:relative">
+                  <span style="box-sizing:border-box;display:block;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;max-width:100%">
+                    <img style="display:block;max-width:100%;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0" alt="" aria-hidden="true" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+">
+              </div>
+              <p class="text-center">Processing prediction</p>
+            </div>
+            <div class="md:basis-1/3 flex justify-center">
+              <div class="p-1 pt-2 bg-anyai-gradient mx-2">
+                <div class="bg-base-100"> 
+                  <div class="output-image-container">
+                    <img class="output-image" src="{{ url_for('app_router.display_preprocessed_image', filename=filename) }}" alt="Preprocessed image">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </p>
+        </div>
+          <div class="md:px-24 px-4 text-justify mb-8 pb-8 bg-base-200" >
+            {% if context['prediction'] %}
+              <h1 class="sm:text-3xl text-2xl font-medium title-font text-center text-primary pt-4">Your results:</h1>
+              <div id="result">
+                <div class="text-2xl">
+                  <div class="float-l">
+                    <label class="text-primary">Predicted class:</label><br>
+                    <label class="text-primary">Score:</label>
+                    <label class="text-primary">Model:</label>
+                  </div>
+                  <div>
+                    <p>{{ context['prediction'] }}</p>
+                    <p>{{ context['score'] }}</p>
+                    <p>{{ context['model'] }}</p>
+                  </div>
+                </div>
+              </div>
+
+                  <input name="report" style="visibility: hidden;" value="{'filename': '{{ filename }}', 'prediction': '{{ context['prediction'] }}', 'score': {{ context['score'] }}, 'model': '{{ context['model'] }}'' }"/>
+              </form>
+            {% endif %}
+      {% endif %}
+  </body>
+</html>
